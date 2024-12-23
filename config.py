@@ -7,6 +7,6 @@ embedding_name = 'text-embedding-3-small'
 model_name = 'gpt-4o-mini'
 
 # Pinecone 설정
-collection_name = "Bribbon_list"
-persist_directory = "vector_store/Bribbon_db"
+collection_name = "bluer_db_openai"
+persist_directory = "vector_store/chroma/bluer_db"
 
