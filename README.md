@@ -54,6 +54,10 @@
 
 pandas == <> <br/>
 numpy == <> <br/>
+config == 0.5.1
+langchain == 0.3.13
+langchain-core == 0.3.28
+langchain-text-splitters == 0.3.4
 <> == <> <br/>
 
 ## 데이터 준비 및 분석
