@@ -58,60 +58,45 @@ numpy == <> <br/>
 
 ## 데이터 준비 및 분석
 
-### ✔️ Column 정의
+### 🎣 1. 데이터 수집
 
-[Google 스프레드시트 보기](https://docs.google.com/spreadsheets/d/1PvMto9SCOenoNsXg_mjzhMyAeArdpVEP5e5ZlOuftFI/edit?usp=sharing)
+        import requests
+        import time
 
-| Column 이름             | Description                | Feature Value                                                                               | 비고                                                                                                                                                    |
-| ----------------------- | -------------------------- | ------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| CLIENTNUM               | 고객 번호                  | n                                                                                           | 삭제 필요                                                                                                                                               |
-| churn                   | 결과 값(churn)             | "Existing", "Attrited"                                                                      | - Encoding → Label Encoding                                                                                                                             |
-| age                     | 나이                       | 26~57                                                                                       |                                                                                                                                                         |
-| gender                  | 성별                       | M, F                                                                                        | - Encoding → Label Encoding                                                                                                                             |
-| dependent_cnt           | 부양 가족수                | 0, 1, 2, 3, 4, 5                                                                            |                                                                                                                                                         |
-| education_level         | 학력                       | "Graduate", "High School", "Unknown", "Uneducated", "College", "Post-Graduate", "Doctorate" | - 결측치 처리 필요: Unknown(1519개/0.149) → 최빈값 <br> - graduate의 비율이 높음<br>- Encoding - 순서의 의미가 있어 보임 → 순서 인코딩 (Ordinal Encoding)|
-| marital_status          | 결혼 여부                  | "Married", "Single", "Unknown", "Divorced"                                                  | - 결측치 처리 필요: Unknown(749개/0.07) → 최빈값<br>- married의 비율이 높음<br>- Encoding → One-Hot Encoding                                            |
-| income_category         | 소득 수준(범주)            | "Unknown", "Less than $40K", "$40K - $60K", "$80K - $120K", "$60K - $80K", "$120K +"        | - 결측치 처리 필요: Unknown(1112개/0.109) → 비례배분<br>- Encoding - 순서의 의미가 있어 보임 → 순서 인코딩 (Ordinal Encoding)                           |
-| card_category           | 카드 종류(범주)            | "Blue", "Silver", "Gold", "Platinum"                                                        | - Encoding → One-Hot Encoding                                                                                                                           |
-| card_usage_period       | 카드 사용 기간             | n                                                                                           | - max : 56 > min : 13<br>- 0.15 기준으로 탈락                                                                                                           |
-| account_cnt             | 계좌 수                    | 1, 2, 3, 4, 5, 6                                                                            |                                                                                                                                                         |
-| inactive_month_in_year  | 연내 계좌 비활성 기간      | 0, 1, 2, 3, 4, 5, 6                                                                         |                                                                                                                                                         |
-| visit_cnt_in_year       | 연간 은행 방문 수          | 0, 1, 2, 3, 4, 5, 6                                                                         |                                                                                                                                                         |
-| credit_limit            | 신용 한도                  | n                                                                                           | - max: 34516.0 > min: 1438.3                                                                                                                            |
-| revolving_balance       | 잔금                       | n                                                                                           | - max: 2517 > min: 1438.3                                                                                                                               |
-| avg_remain_credit_limit | 평균 잔여 신용 한도        | n                                                                                           | - max : 34516.0 > min: 3.0                                                                                                                        |
-| total_amt_change_Q4_Q1  | 연간 거래액 변화율(Q4/Q1)  | n                                                                                           | - max : 3.397 / min: 0<br>                                                                                                                              |
-| total_trans_amt         | 총 거래 금액               | n                                                                                           | - max : 18484 / min: 510                                                                                                                                |
-| total_trans_cnt         | 총 거래 횟수               | n                                                                                           | - max : 139 / min : 0<br>                                                                                                                               |
-| total_cnt_change_Q4_Q1  | 총 거래 횟수 변화율(Q4/Q1) | n                                                                                           |                                                                                                                                                         |
-| avg_utilization_ratio   | 카드 한도 대비 잔액의 비율 | 0 <= n <= 1                                                                                 | - 0 ~ 1 실수<br>- '0' 의 비율이 높음                                                                                                                    |
+        restaurants = []  # 데이터 수집할 리스트 생성
 
-### ✔️ EDA(탐색적 데이터 분석)
+        total_pages = 576 # 전체 페이지 수를 설정
+        url_template = "https://www.bluer.co.kr/api/v1/restaurants?page={page}&size=30&query=&foodType=&foodTypeDetail=&feature=&location=&locationDetail=&area=&areaDetail=&priceRange=&ribbonType=&recommended=false&isSearchName=false&tabMode=single&searchMode=ribbonType&zone1=&zone2=&zone2Lat=&zone2Lng="
 
-![image](https://github.com/SKNETWORKS-FAMILY-AICAMP/SKN06-2nd-4Team/blob/main/report/EDA.png)
+        headers = {
+            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
+            "Accept": "application/hal+json",
+            "x-requested-with": "XMLHttpRequest"
+        }
 
-<br/>
+        # 크롤링 진행
+        for page in range(total_pages):
+            url = url_template.format(page=page)
+            response = requests.get(url, headers=headers)
+    
+            if response.status_code == 200:
+                data = response.json()
+                restaurants.extend(data["_embedded"]["restaurants"])
+                print(f"Page {page + 1}/{total_pages} collected successfully.")
+            else:
+                print(f"Failed to fetch page {page + 1}. Status code: {response.status_code}")
 
-## 데이터 전처리
-### ✔️ 1. 칼럼명 수정 및 소문자화
-```
-rename_columns = {
-        'Attrition_Flag': 'churn',
-        'Customer_Age' : 'age',
-        'Dependent_count' : 'dependent_cnt',
-        'Months_on_book' : 'card_usage_period',
-        'Total_Relationship_Count' : 'account_cnt',
-        'Months_Inactive_12_mon' : 'inactive_month_in_year',
-        'Contacts_Count_12_mon' : 'visit_cnt_in_year',
-        'Total_Revolving_Bal' : 'revolving_balance',
-        'Avg_Open_To_Buy' : 'avg_remain_credit_limit',
-        'Total_Amt_Chng_Q4_Q1' : 'total_amt_change_q4_q1',
-        'Total_Trans_Ct' : 'total_trans_cnt',
-        'Total_Ct_Chng_Q4_Q1' : 'total_cnt_change_q4_q1'
-    }
-data.rename(columns=rename_columns, inplace=True)
-data.columns = data.columns.str.lower()
-```
+        # 각 요청 사이에 시간 간격 추가
+            time.sleep(2)  # 2초 간격
+
+        # 전체 데이터를 저장
+        import json
+        with open("restaurants.json", "w", encoding="utf-8") as f:
+            json.dump(restaurants, f, ensure_ascii=False, indent=4)
+
+        print("전체 페이지 크롤링 완료. JSON 파일로 저장됨.")
+
+
 ### ✔️ 2. 불필요 칼럼 삭제
 > clientnum : 회원번호
 > 
