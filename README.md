@@ -97,46 +97,111 @@ numpy == <> <br/>
         print("전체 페이지 크롤링 완료. JSON 파일로 저장됨.")
 
 
-### ✔️ 2. 불필요 칼럼 삭제
-> clientnum : 회원번호
+### 🔪 2. 불필요 칼럼 삭제 및 정규화
+> 결측치, 중복값, TMI (위도/경도, 업주명) 등
 > 
-> naive_bayes_classifier_attrition_flag_card_category_contacts_count_12_mon_dependent_count_education_level_months_inactive_12_mon_1
->
-> naive_bayes_classifier_attrition_flag_card_category_contacts_count_12_mon_dependent_count_education_level_months_inactive_12_mon_2
-> 
-```
-data = data.drop(
-    columns=[
-        'clientnum',
-        'naive_bayes_classifier_attrition_flag_card_category_contacts_count_12_mon_dependent_count_education_level_months_inactive_12_mon_1',
-        'naive_bayes_classifier_attrition_flag_card_category_contacts_count_12_mon_dependent_count_education_level_months_inactive_12_mon_2'
-    ], 
-    inplace=True
-)
-```
-### ✔️ 3. 결과값 'churn' mapping
-> Existing Customer: 0
->
-> Attrited Customer: 1 (이탈)
->
-```
-data['churn'] = data['churn'].map({"Existing Customer": 0, "Attrited Customer": 1})
-```
-### ✔️ 4. 결측치 처리
 
-⭐️ 3개의 문자열 칼럼에서 'Unknown' 결측치가 발견됐다. 다양한 처리 방법 중 삭제를 고려하기도 했지만, 삭제할 경우 데이터 손실이 많아질 것 같아 **대체** 방법을 선택했다.
+```
 
-| education_level                                                                                                                             | marital_status                                                                                                                              | income_category                                                                                                                             |
-| ------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- |
-| ![image](https://github.com/SKNETWORKS-FAMILY-AICAMP/SKN06-2nd-4Team/blob/main/report/%EA%B2%B0%EC%B8%A1%EC%B9%98%20%ED%95%99%EB%B2%8C.png) | ![image](https://github.com/SKNETWORKS-FAMILY-AICAMP/SKN06-2nd-4Team/blob/main/report/%EA%B2%B0%EC%B8%A1%EC%B9%98%20%EA%B2%B0%ED%98%BC.png) | ![image](https://github.com/SKNETWORKS-FAMILY-AICAMP/SKN06-2nd-4Team/blob/main/report/%EA%B2%B0%EC%B8%A1%EC%B9%98%20%EC%9E%90%EC%82%B0.png) |
-| SimpleImputer(**최빈값**)                                                                                                                   | SimpleImputer(**최빈값**)                                                                                                                   | 사용자 정의 imputer(**가중대체**)                                                                                                           |
-| unkown의 비율이 나머지에 비에 높지 않음                                                                                                     | unkown의 비율이 나머지에 비에 높지 않음                                                                                                     | unkown의 비율이 나머지에 비에 높음                                                                                                          |
-| Graduate가 가장 많은 비율(30.89%)을 차지                                                                                                    | Married가 가장 높은 비율(46.28%)을 차지                                                                                                     | 각각 나머지 자료의 비율에 따라 랜덤으로 분배                                                                                                |
+#### 1. 전처리
 
-</br>
-👉🏻 우리가 '<b>가중대체</b>'를 위해 정의한 Imputer
-</br>
-</br>
+import pandas as pd
+from pandas import json_normalize
+
+# JSON 파일 읽기
+with open("restaurants.json", "r", encoding="utf-8") as f:
+    restaurants = json.load(f)
+
+# Pandas DataFrame으로 변환
+df = pd.DataFrame(restaurants)
+
+# 기존 전처리 코드 적용
+# 필요 없는 컬럼 제거
+columns_to_drop = ["createdDate", "id", "timeInfo", "gps", "tags", "status", "bookStatus",
+                   "buzUsername", "business", "pageView", "brandMatchStatus", "brandRejectReason",
+                   "orderDescending", "foodTypeDetails", "countEvaluate", "bookmark", "features",
+                   "feature107", "brandBranches", "foodTypes", "brandHead", "firstImage", "firstLogoImage"]
+df = df.drop(columns=[col for col in columns_to_drop if col in df.columns])
+
+# Nested JSON 컬럼 정규화
+nested_columns = ["headerInfo", "defaultInfo", "statusInfo", "juso", "review", "etcInfo","_links"]
+for column in nested_columns:
+    if column in df.columns:
+        n = pd.json_normalize(df[column])  # 정규화
+        n.columns = [f"{column}_{subcol}" for subcol in n.columns]  # 열 이름 접두사 추가
+        df = pd.concat([df.drop(columns=[column]), n], axis=1)  # 기존 열 삭제 후 결합
+
+# 필요 없는 sub_columns 제거
+sub_columns_to_drop = ["headerInfo_nickname", "headerInfo_year", "headerInfo_ribbonTypeByOrdinal",
+                       "defaultInfo_websiteFacebook", "statusInfo_storeType", "statusInfo_openEra",
+                       "statusInfo_newOpenDate", "juso_roadAddrPart2", "juso_jibunAddr", "juso_zipNo",
+                       "juso_admCd", "juso_detBdNmList", "juso_zone2_1", "juso_zone2_2", "juso_map_1",
+                       "juso_map_2", "review_readerReview", "review_businessReview", "review_editorReview",
+                       "etcInfo_toilet", "etcInfo_toiletEtc", "etcInfo_chain", "etcInfo_close", "etcInfo_renewal",
+                       "etcInfo_appYn", "etcInfo_projectNo", "etcInfo_reviewerRecommend", "etcInfo_onlySiteView",
+                       "etcInfo_history", "etcInfo_mainMemo", "_links_self.href", "_links_restaurant_href",
+                       "_links_restaurant_templated", "_links_childrenRestaurants.href", "_links_childrenRestaurants.templated"
+                       "_links_evaluates.href", "_links_relativeBusinessOrder.href", "_links_parentRestaurant.href",
+                       "_links_parentRestaurant.templated", "_links_reports.href", "_links"
+                       ""]
+df = df.drop(columns=[col for col in sub_columns_to_drop if col in df.columns])
+
+# 데이터 저장
+df.to_csv("nested_all_restaurants.csv", index=False)
+print("전처리 테스트 완료. CSV 파일 저장됨.")
+
+
+```
+### 🍡 3. 형식 일치화
+> 년도, 웹사이트 주소 기입 여부, 결측치 표기
+>
+
+```
+
+import numpy as np
+import re
+
+# 빈칸이나 "없음"으로 표기된 칸을 None으로 변경
+df.replace(["", "없음"], None, inplace=True)
+
+# foodDetailTypes의 리스트 해제
+# 각 행의 값이 리스트라면 이를 문자열로 변환 (쉼표로 구분된 문자열로 병합)
+if "foodDetailTypes" in df.columns:
+    df["foodDetailTypes"] = df["foodDetailTypes"].apply(lambda x: ", ".join(x) if isinstance(x, list) else x)
+
+if "headerInfo_ribbonType" in df.columns:
+    df["headerInfo_ribbonType"] = df["headerInfo_ribbonType"].map(ribbon_mapping)
+
+# 웹사이트 열 통합
+if "defaultInfo_website" in df.columns and "defaultInfo_websiteInstagram" in df.columns:
+    def merge_websites(row):
+        websites = [site for site in [row.get("defaultInfo_website"), row.get("defaultInfo_websiteInstagram")] if site]
+        return ", ".join(websites) if websites else None
+
+    df["defaultInfo_website_combined"] = df.apply(merge_websites, axis=1)
+    df.drop(columns=["defaultInfo_website", "defaultInfo_websiteInstagram"], inplace=True)
+    df.rename(columns={"defaultInfo_website_combined": "defaultInfo_website"}, inplace=True)
+
+# statusInfo_openDate 형식 변환 (년도 4자리로 추출 후 "2024년" 형식으로 표기)
+def extract_year_with_suffix(date):
+    if isinstance(date, str):
+        # 패턴 매칭으로 숫자 4자리 추출
+        match = re.search(r'\d{4}', date)
+        if match:
+            return f"{int(match.group(0))}년"  # "2024년" 형식으로 반환
+    return None
+
+if "statusInfo_openDate" in df.columns:
+    df["statusInfo_openDate"] = df["statusInfo_openDate"].apply(extract_year_with_suffix)
+
+# 최종 결과를 CSV 파일로 저장
+df.to_csv("cleaned_all_restaurants.csv", index=False)
+print("수정된 최종 CSV 파일 저장 완료!")
+
+
+```
+
+
 
 ```python
 class ProportionalImputer(BaseEstimator, TransformerMixin):
