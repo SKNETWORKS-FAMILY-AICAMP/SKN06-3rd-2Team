@@ -16,52 +16,45 @@
 
 
 
-### ✔️ 개발 기간
+### 🍴 개발 기간
 
 2024.12.23 ~ 2024.12.26 (총 3일)
 
-### ✔️ 개요
+### 🍴 개요
 
 우리나라 최초의 맛집 “블루리본”</br>
 "도시를 대표하는 세계적인 맛집 가이드북: 블루리본 서베이"에게 **뭐든지 물어보세요!**</br>
 자 이제 나만의 맛집을 찾아 떠나볼까요?
 
-### ✔️ 목표
+### 🍴 목표
 
-신용카드 사용 고객의 데이터를 분석하여 이탈 가능성을 예측하는 모델을 개발
+블루리본 서베이 웹사이트의 정보를 학습하여 사용자가 찾는 맛집 정보를 조회할 수 있게 도와주는 어플리케이션 개발
 
 </br>
 
-#### ✔️ Stacks
+#### 🍴 Stacks
 
 ![Discord](https://img.shields.io/badge/discord-5865F2?style=for-the-badge&logo=discord&logoColor=white)
 
 ![Python](https://img.shields.io/badge/python-3776AB?style=for-the-badge&logo=python&logoColor=white)
 ![Numpy](https://img.shields.io/badge/NumPy-013243?style=flat-square&logo=NumPy&logoColor=white)
 ![pandas](https://img.shields.io/badge/pandas-150458?style=for-the-badge&logo=pandas&logoColor=white)
-<img src="https://img.shields.io/badge/scikitlearn-%23F7931E?style=for-the-badge&logo=scikitlearn&logoColor=white"/>
-
-![Streamlit](https://img.shields.io/badge/streamlit-FF4B4B?style=for-the-badge&logo=streamlit&logoColor=white)
 </br>
-
 ![Git](https://img.shields.io/badge/Git-F05032?style=for-the-badge&logo=Git&logoColor=white)
 ![Github](https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=GitHub&logoColor=white)
+<br/> <>
+<br/> <>
+<br/> <>
+<br/> <>
+<br/> <>
+<br/> <>
 
-#### ✔️ Requirements
 
-streamlit == 1.39.0 <br/>
-pymysql == 1.1.1 <br/>
-pandas == 2.2.3 <br/>
-openpyxl == 1.1.0 <br/>
-sqlalchemy == 2.0.35 <br/>
-configparser == 7.1.0 <br/>
-matplotlib == 3.9.2 <br/>
-xlrd == 2.0.1 <br/>
-seaborn == 0.13.2 <br/>
-joblib == 1.3.2 <br/>
-scikit-learn == 1.3.1 <br/>
-numpy == 1.26.4 <br/>
-xgboost == 1.7.6 <br/>
+#### 🍴 Requirements
+
+pandas == <> <br/>
+numpy == <> <br/>
+<> == <> <br/>
 
 ## 데이터 준비 및 분석
 
