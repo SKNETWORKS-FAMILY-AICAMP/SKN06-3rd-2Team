@@ -12,7 +12,9 @@
 
 </br>
 
-# 💳 신용카드 이용 고객 - 이탈 예측 모델 💳
+### RAG 기반 - 맛집 정보를 알려주는 어플리케이션 ![small BR](https://github.com/user-attachments/assets/9d9b741c-075b-4316-aeb3-91135fc85acb)![small BR](https://github.com/user-attachments/assets/f5c8c9cf-e5a7-41ad-acf2-36e3d24f374b)![small BR](https://github.com/user-attachments/assets/516ef109-240f-4142-b0da-dbe3ed72ce9e)
+
+
 
 ### ✔️ 개발 기간
 
