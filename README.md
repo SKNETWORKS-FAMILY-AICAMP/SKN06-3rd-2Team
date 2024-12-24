@@ -201,10 +201,10 @@ print("수정된 최종 CSV 파일 저장 완료!")
 
 ```
 
-### 산출물 정리
-> 웹사이트 크롤링 데이터 : restaurant.json </br>
-> 필요없는 column 제거 후 데이터 : nested_restaurant.csv </br>
-> 정규화 및 전처리 후 데이터 : Clean_all_restaurants.csv </br>
+### 🥩 4. 산출물 정리
+> 웹사이트 크롤링 데이터 : blueRibbon.csv </br>
+> 필요없는 column 제거 후 데이터 : nested_restaurants.csv </br>
+> 정규화 및 전처리 후 데이터 : cleaned_all_restaurants.csv </br>
 
 </br>
 </br>
@@ -221,7 +221,6 @@ print("수정된 최종 CSV 파일 저장 완료!")
 </br>
 </br>
 </br>
-
 </br>
 </br>
 </br>
