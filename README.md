@@ -429,7 +429,7 @@ chain = ({'content': retriever, 'question':RunnablePassthrough()} | prompt_templ
 > 
 >
 김동명
-> 크롤링이 좋았지...
+> 크롤링이 선녀였네..
 
 박창규
 >
