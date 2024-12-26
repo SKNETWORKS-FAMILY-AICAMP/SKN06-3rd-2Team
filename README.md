@@ -7,7 +7,7 @@
 
 | 강채연 | 김동명| 박창규 | 백하은| 홍준 |
 | --- | --- | --- | --- | --- |
-| <> | ![돌아이](https://github.com/user-attachments/assets/bc18d0fd-cafa-4698-aedc-28d6cf51db5f) | <> | ![강록이형](https://github.com/user-attachments/assets/1e278c6c-7b68-4a57-8a6f-4097f5faa2c2) | <> |
+| <> |![돌아이](https://github.com/user-attachments/assets/eab0022e-6793-40e5-929a-9c1fda6d57c7)| <> |![강록이형](https://github.com/user-attachments/assets/3f3a4698-0df0-4028-8a9c-d8ced265a568)| <> |
 |성능 테스트 및 최적화|데이터 수집 및 전처리|RAG 체인 설계 및 최적화|벡터 데이터베이스 구축|RAG 체인 설계 및 최적화|
 
 </br>
