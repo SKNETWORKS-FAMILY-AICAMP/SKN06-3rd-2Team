@@ -402,12 +402,10 @@ chain = ({'content': retriever, 'question':RunnablePassthrough()} | prompt_templ
 </br></br>
 ## 😋 모델 평가
 
-| 질문 | 서초동에 가족과 함께 갈만한 식당을 소개해줘 |
-| ------- |-------|
-| 응답 | ~~ |
-| ------- |-------|
+|질문|서초동에 가족과 함께 갈만한 식당을 소개해줘|
+|----|----|
+|응답| ~~ |
 | 질문 | 청담동에 블루리본 2개 이상인 일식당을 소개해줘|
-| ------- |-------|
 | 응답 | ~~ |
 
 ###  최고 성능 모델![small BR](https://github.com/user-attachments/assets/9d9b741c-075b-4316-aeb3-91135fc85acb)![small BR](https://github.com/user-attachments/assets/9d9b741c-075b-4316-aeb3-91135fc85acb)![small BR](https://github.com/user-attachments/assets/9d9b741c-075b-4316-aeb3-91135fc85acb)
