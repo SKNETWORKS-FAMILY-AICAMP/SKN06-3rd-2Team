@@ -435,7 +435,7 @@ chain = ({'content': retriever, 'question':RunnablePassthrough()} | prompt_templ
 >
 
 백하은
->
+> 다음엔 2인분으로 할게요 ..
 
 홍준
 >
