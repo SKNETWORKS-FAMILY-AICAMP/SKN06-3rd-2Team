@@ -41,9 +41,9 @@ config == 0.5.1 </br>
 langchain == 0.3.13 </br>
 chromadb == 0.5.23 </br>
 
-## 데이터 준비 및 분석
+## 1. 데이터 준비 및 분석
 
-### 🎣 1. 데이터 수집
+### 🎣 1) 데이터 수집
 
         import requests
         import time
@@ -82,13 +82,13 @@ chromadb == 0.5.23 </br>
         print("전체 페이지 크롤링 완료. JSON 파일로 저장됨.")
 
 
-### 🔪 2. 불필요 칼럼 삭제 및 정규화
+### 🔪 2) 불필요 칼럼 삭제 및 정규화
 > 결측치, 중복값, TMI (위도/경도, 업주명) 등
 > 
 
 ```
 
-#### 1. 전처리
+# 전처리
 
 import pandas as pd
 from pandas import json_normalize
@@ -137,7 +137,7 @@ print("전처리 테스트 완료. CSV 파일 저장됨.")
 
 
 ```
-### 🍡 3. 형식 일치화
+### 🍡 3) 형식 일치화
 > 년도, 웹사이트 주소 기입 여부, 결측치 표기
 >
 
@@ -186,93 +186,82 @@ print("수정된 최종 CSV 파일 저장 완료!")
 
 ```
 
-### 🥩 4. 산출물 정리
+### 🥩 4) 산출물 정리
 > 웹사이트 크롤링 데이터 : blueRibbon.csv </br>
 > 필요없는 column 제거 후 데이터 : nested_all_restaurants.csv </br>
 > 정규화 및 전처리 후 데이터 : cleaned_all_restaurants.csv </br>
 
-</br>
-</br>
-</br>
-</br>
-</br>
-</br>
-</br>
-</br>
-</br>
-</br>
-</br>
-</br>
-</br>
-</br>
-</br>
-</br>
-</br>
-</br>
-</br>
-</br>
-</br>
 
-#### 전처리 파이프라인 저장
+## 2. 모델링
+
+### 🥩 1) embedding_vector 생성
+> text_splitter, embeddings 를 사용하여 데이터를 분해 및 저장
+> 결과 : vector_store에 39074 개의 문서 생성
+
 ```
-import joblib
-import os
+# 데이터 불러오기 및 저장
+data = pd.read_csv('data/cleaned_all_restaurants.csv')
 
-os.makedirs('models', exist_ok=True)
-joblib.dump(
-    preprocessor_pipeline,     # 저장할 모델/전처리기
-    "models/preprocessor.pkl"  # 저장경로. pickle로 저장된다.
+
+# 모든 데이터를 활용하도록 문서화
+
+documents = []
+for i, row in data.iterrows():
+    # 텍스트 내용 (각 행 전체를 하나의 문서로 취급)
+    page_content = "\n".join([f"{col}: {val}" for col, val in row.items()])
+    
+    # Document 생성
+    doc = Document(page_content=page_content)
+    documents.append(doc)
+
+print(f"총 {len(documents)}개의 문서가 생성되었습니다.")
+
+
+# 분리
+splitter = RecursiveCharacterTextSplitter.from_tiktoken_encoder(
+    model_name=MODEL_NAME, 
+    chunk_size=CHUNK_SIZE,
+    chunk_overlap=CHUNK_OVERLAP
 )
+splited_docs = splitter.split_documents(documents)
+
+print("데이터 분리 완료:", len(splited_docs), end='\n\n')
+
+
+# Vector store 저장
+embedding_model = OpenAIEmbeddings(
+    model=EMBEDDING_NAME
+)
+
+# Persist directory 없는 경우 생성
+if not os.path.exists(PERSIST_DIRECTORY):
+    os.makedirs(PERSIST_DIRECTORY)
+
+# 연결 + document 추가
+vector_store = Chroma.from_documents(
+    documents= splited_docs,
+    embedding=embedding_model,
+    collection_name=COLLECTION_NAME,
+    persist_directory=PERSIST_DIRECTORY
+)
+
+print("vecor_store에 splited_docs 저장완료")
 ```
-## 모델링
 
-### ✔️ 모델 선정하기
-
-데이터와 어울리는 7개의 모델들은 뽑아 어떤 모델이 적합할지 확인해 보기로 했다.
-
-- 평가
-
-```
-  from tqdm import tqdm
-
-  from sklearn.linear_model import LogisticRegression
-  from sklearn.tree import DecisionTreeClassifier
-  from sklearn.ensemble import RandomForestClassifier
-  from sklearn.ensemble import GradientBoostingClassifier
-  from xgboost import XGBClassifier, plot_importance
-  from sklearn.svm import SVC
-  from sklearn.neighbors import KNeighborsClassifier
-
-  import matplotlib.pyplot as plt
-  models = {
-      # Logistic Regression model
-      "Logistic Regression": LogisticRegression(),
-      # Decision Tree model
-      "Decision Tree Classifier": DecisionTreeClassifier(),
-      # Random Forest model
-      "Random Forest": RandomForestClassifier(),
-      # Gradient Boosting model
-      "Gradient Boosting": GradientBoostingClassifier(),
-      # XGBoost model
-      "XGBoost": XGBClassifier(),
-      # SVM(Support Vector Machine)
-      "SVC": SVC(),
-      # KNN(K-Nearest Neighbors)
-      "KNeighborsClassifier": KNeighborsClassifier(),
-  }
+### 🥩 2) RAG chain 구현
 
 
-  for name, model in tqdm(models.items(), desc="Training Models", total=len(models)):
-      # 모델 훈련
-      model.fit(X_train, y_train)
-      # 모델 평가
-      score = model.score(X_test, y_test)
-      # 모델 검증
-      model_pred = model.predict(X_test)
-      # 모델 정확도
-      tqdm.write(f">>> {name} : 정확도 {score:.2%}\n")
 
-```
+
+
+
+
+
+
+
+
+
+
 
 - 결과
 
