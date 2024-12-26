@@ -1,5 +1,5 @@
 # split 설정
-chunk_size = 1000
+chunk_size = 500
 chunk_overlap = 100
 
 # model 설정

@@ -1,0 +1,37 @@
+# Python 관련
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+env/
+venv/
+*.env
+
+# Jupyter Notebook 체크포인트
+.ipynb_checkpoints/
+
+# 데이터 파일
+data/
+
+# Vector Store 데이터 (폴더 전체 무시)
+vector_store/
+
+# IDE 설정 파일
+.vscode/
+.idea/
+
+# OS/편집기 관련
+.DS_Store
+Thumbs.db
+
+# 로그 파일
+*.log
+*.out
+*.err
+
+# 기타 백업 파일
+*.bak
+*.swp
+*.tmp
+*.temp
