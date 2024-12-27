@@ -29,6 +29,15 @@ config == 0.5.1 </br>
 langchain == 0.3.13 </br>
 chromadb == 0.5.23 </br>
 </br></br>
+
+## 🦴 0. 모델 구조
+![structure](https://github.com/user-attachments/assets/628a2d6c-4033-4640-8008-118a8e4e6dba)
+
+
+</br></br>
+
+
+
 ## 1. 데이터 준비 및 분석
 ### 🎣 1) 데이터 수집
         import requests
@@ -248,13 +257,9 @@ chain =  {'context': retriever  | RunnableLambda(content_from_doc), 'question': 
 </br>
 
 
-## 🦴 3. 모델 구조
->
-
-</br></br>
 
 
-## 😋 4. 모델 평가
+## 😋 3. 모델 평가
 
 |질문|서울 서대문구 근처 음식점 중 리본 개수가 2개인 맛집을 추천해줘.|
 |---|---|
