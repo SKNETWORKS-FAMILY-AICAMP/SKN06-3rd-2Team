@@ -438,4 +438,4 @@ chain = ({'content': retriever, 'question':RunnablePassthrough()} | prompt_templ
 >
 
 홍준
->
+> 더 열심히 해야겠다.
