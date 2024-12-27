@@ -257,9 +257,9 @@ chain =  {'context': retriever  | RunnableLambda(content_from_doc), 'question': 
 
 ## 팀원 회고
 강채연
-> 
+> 플젝하면서 맛집 많이 알게되어서 조앗다 우하하
 >
-### RAG 기반 - 맛집 정보를 알려주는 어플리케이션 ![small BR](https://github.com/user-attachments/assets/9d9b741c-075b-4316-aeb3-91135fc85acb)![small BR](https://github.com/user-attachments/assets/f5c8c9cf-e5a7-41ad-acf2-36e3d24f374b)![small BR](https://github.com/user-attachments/assets/516ef109-240f-4142-b0da-dbe3ed하
+
 김동명
 > 크롤링이 선녀였네..
 박창규
