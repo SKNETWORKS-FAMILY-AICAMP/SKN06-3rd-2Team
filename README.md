@@ -441,4 +441,4 @@ chain = ({'content': retriever, 'question':RunnablePassthrough()} | prompt_templ
 >
 
 홍준
-> 어디로 가야하오?
+> 어디로 가야하오...
