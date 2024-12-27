@@ -205,21 +205,15 @@ print("수정된 최종 CSV 파일 저장 완료!")
 
 ```
 # 데이터 불러오기 및 저장
-data = pd.read_csv('data/final_restaurants.csv')
+data = pd.read_csv('data/final_restaurant.csv', low_memory=False)
 
 
 # 모든 데이터를 활용하도록 문서화
+doc_list = []
+for _, info in data.iterrows():
+    doc_list.append(Document(page_content=str(dict(info)), metadata=dict(info)))
 
-documents = []
-for i, row in data.iterrows():
-    # 텍스트 내용 (각 행 전체를 하나의 문서로 취급)
-    page_content = "\n".join([f"{col}: {val}" for col, val in row.items()])
-    
-    # Document 생성
-    doc = Document(page_content=page_content)
-    documents.append(doc)
-
-print(f"총 {len(documents)}개의 문서가 생성되었습니다.")
+print(f"총 {len(doc_list)}개의 문서가 생성되었습니다.")
 
 
 # Vector store 저장
@@ -227,19 +221,21 @@ embedding_model = OpenAIEmbeddings(
     model=EMBEDDING_NAME
 )
 
+
 # Persist directory 없는 경우 생성
 if not os.path.exists(PERSIST_DIRECTORY):
     os.makedirs(PERSIST_DIRECTORY)
 
+
 # 연결 + document 추가
 vector_store = Chroma.from_documents(
-    documents= splited_docs,
+    documents= doc_list,
     embedding=embedding_model,
     collection_name=COLLECTION_NAME,
     persist_directory=PERSIST_DIRECTORY
 )
 
-print("vecor_store에 splited_docs 저장완료")
+print("vecor_store에 저장완료")
 ```
 
 ### 🍖 2) config로부터 설정 값 입력
@@ -252,47 +248,6 @@ EMBEDDING_NAME = config.embedding_name
 COLLECTION_NAME = config.collection_name
 PERSIST_DIRECTORY = config.persist_directory
 
-```
-
-### 🍖 3) vector_store 에 저장
-```
-data = pd.read_csv("final_restaurants.csv")
-
-
-# 모든 데이터를 활용하도록 문서화
-data.fillna("", inplace=True)  # NaN 값 처리
-
-documents = []
-for i, row in data.iterrows():
-    # 텍스트 내용 (각 행 전체를 하나의 문서로 취급)
-    page_content = "\n".join([f"{col}: {val}" for col, val in row.items()])
-    metadata = row.to_dict()
-    # Document 생성
-    doc = Document(page_content=page_content, metadata=metadata)
-    
-    documents.append(doc)
-
-print(f"총 {len(documents)}개의 문서가 생성되었습니다.")
-
-
-# Vector store 저장
-embedding_model = OpenAIEmbeddings(
-    model=EMBEDDING_NAME
-)
-
-# Persist directory 없는 경우 생성
-if not os.path.exists(PERSIST_DIRECTORY):
-    os.makedirs(PERSIST_DIRECTORY)
-
-# 연결 + document 추가
-vector_store = Chroma.from_documents(
-    documents= splited_docs,
-    embedding=embedding_model,
-    collection_name=COLLECTION_NAME,
-    persist_directory=PERSIST_DIRECTORY
-)
-
-print("vecor_store에 splited_docs 저장완료")
 ```
 
 > 저장된 내용 확인
@@ -319,6 +274,7 @@ print(f"Documents: {documents[:5]}")
 print(f"Metadatas: {metadatas[:5]}")
 print(vector_store._collection.count())
 ```
+
 </br></br>
 ## 3. GPT 모델, Prompt, Retriever 생성
 ```
@@ -331,51 +287,51 @@ vector_store = Chroma(
 
 # GPT Model 생성
 model = ChatOpenAI(
-    model=MODEL_NAME,
+    model='gpt-4o',
     temperature=0 
 )
 
 
-# Retriever 생성
 retriever = vector_store.as_retriever(
     search_type="mmr",
-    search_kwargs={"k":5, "fetch_k":10, "lambda_mult":0.5}
+    search_kwargs={
+        "k": 50,
+        "fetch_k": 200,
+        "lambda_mult": 0.5,
+        # "filters": {"리본개수": {"$gte": 0}}
+    }
 )
 
 
-# # Prompt Template 생성
-# prompt_template = ChatPromptTemplate(
-#     [
-#         ("system", "당신은 한국의 블루리본 서베이 전문가입니다. 질문에 자세히 답해주세요."),
-#         MessagesPlaceholder("history"), 
-#         ("human", "{query}")
-#     ]
-# )
-
 prompt_template = ChatPromptTemplate.from_messages([
-    ("system", "You are a professinal for blue ribbon survey in korea. please reply correct anwser from exact information."),
+    ("system", dedent("""
+        당신은 한국의 식당을 소개하는 인공지능 비서입니다. 
+        반드시 질문에 대해서 [context]에 주어진 내용을 바탕으로 답변을 해주세요. 
+        질문에 '리본개수', '평점', '몇 개'라는 키워드가 포함된 경우, [context]에서 "리본개수" 항목을 확인해 답변하세요.
+        리본개수는 평점과 같은 의미를 가집니다.
+        [context]
+        {context}
+    """)),
     ("human", "{question}")
 ])
 
 
 # Chain 생성
 
-# retrieval_qa = RetrievalQA.from_chain_type(
-#     llm=model,
-#     retriever=retriever,
-#     return_source_documents=True,  # Include source documents in response
-# )
+def content_from_doc(docs:list[Document]):
+    return "\n\n".join([d.page_content for d in docs])
 
-chain = ({'content': retriever, 'question':RunnablePassthrough()} | prompt_template | model | StrOutputParser() )
+
+chain =  {'context': retriever  | RunnableLambda(content_from_doc), 'question': RunnablePassthrough()}  | prompt_template | model | StrOutputParser()
 
 ```
 
 </br></br>
 ## 😋 모델 평가
 
-|질문|서초동에 가족과 함께 갈만한 식당을 소개해줘|
+|질문|서울 서대문구 근처 음식점 중 리본개수가 2개인 맛집을 추천해줘.|
 |----|----|
-|응답| ~~ |
+|응답| 서울 서대문구 근처에서 리본개수가 2개인 맛집으로는 '카덴'이 있습니다. 이곳은 일식주점, 이자카야로 정호영 셰프의 일식 요리를 즐길 수 있는 곳입니다. 모둠사시미를 비롯해 잘 구운 생선구이 등 일품 요리를 맛볼 수 있으며, 제철 재료를 사용하기 때문에 메뉴는 주기적으로 바뀝니다. 마주 보고 앉는 다치 자리 외에 별도로 구분된 룸도 갖추고 있습니다. |
 | 질문 | 청담동에 블루리본 2개 이상인 일식당을 소개해줘|
 | 응답 | ~~ |
 
