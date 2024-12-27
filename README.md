@@ -263,11 +263,20 @@ chain =  {'context': retriever  | RunnableLambda(content_from_doc), 'question': 
 ## 팀원 회고
 강채연
 > 플젝하면서 맛집 많이 알게되어서 조앗다 우하하
+</br>
+
 김동명
 > 크롤링이 선녀였네..
+</br>
+
 박창규
 >
+</br>
+
 백하은
 >
+</br>
+
 홍준
 > 어디로 가야하오...
+
