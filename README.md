@@ -369,7 +369,6 @@ chain =  {'context': retriever  | RunnableLambda(content_from_doc), 'question': 
 
 이 외에도 다양한 프랑스식 식당이 있으니 참고하시기 바랍니다! |
 
-###  최고 성능 모델![small BR](https://github.com/user-attachments/assets/9d9b741c-075b-4316-aeb3-91135fc85acb)![small BR](https://github.com/user-attachments/assets/9d9b741c-075b-4316-aeb3-91135fc85acb)![small BR](https://github.com/user-attachments/assets/9d9b741c-075b-4316-aeb3-91135fc85acb)
 
 🏆 <-------------------->
 
