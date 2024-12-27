@@ -203,7 +203,7 @@ print(f"Metadatas: {metadatas[:5]}")
 print(vector_store._collection.count())
 ```
 </br></br>
-### 3) GPT 모델, Prompt, Retriever 생성
+### 🍖 3) GPT 모델, Prompt, Retriever 생성
 ```
 vector_store = Chroma(
     embedding_function=embedding_model,
@@ -242,7 +242,7 @@ chain =  {'context': retriever  | RunnableLambda(content_from_doc), 'question': 
 ```
 </br>
 
-### 4) 산출물 정리
+### 🥩 4) 산출물 정리
 >
 
 </br>
