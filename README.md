@@ -171,8 +171,10 @@ vector_store = Chroma.from_documents(
 )
 print("vecor_store에 저장완료")
 ```
+</br>
+
 ### 🍖 2) config로부터 설정 값 입력
-# setting
+> setting
 ```
 MODEL_NAME  = config.model_name
 EMBEDDING_NAME = config.embedding_name
@@ -239,6 +241,13 @@ def content_from_doc(docs:list[Document]):
 chain =  {'context': retriever  | RunnableLambda(content_from_doc), 'question': RunnablePassthrough()}  | prompt_template | model | StrOutputParser()
 ```
 </br></br>
+
+## 🦴 모델 구조
+>
+
+</br></br>
+
+
 ## 😋 모델 평가
  
 |질문|서울 서대문구 근처 음식점 중 리본 개수가 2개인 맛집을 추천해줘.|
@@ -249,17 +258,11 @@ chain =  {'context': retriever  | RunnableLambda(content_from_doc), 'question': 
 
 </br>
 
-### 모델 저장
->
-```
-```
-</br></br>
+
 
 ## 팀원 회고
 강채연
 > 플젝하면서 맛집 많이 알게되어서 조앗다 우하하
->
-
 김동명
 > 크롤링이 선녀였네..
 박창규
