@@ -270,12 +270,8 @@ chain =  {'context': retriever  | RunnableLambda(content_from_doc), 'question': 
 
 ### 1) 🥘 평가 결과, 결과물
 ```
-BLEU Score: 0.00
-ROUGE: {'rouge1': Score(precision=0.0, recall=0.0, fmeasure=0.0), 'rougeL': Score(precision=0, recall=0, fmeasure=0)}
-Precision: 0.16
-Recall: 0.15
-F1 Score: 0.16
-Semantic Similarity: 0.87
+Recall: 0.66
+F1 Score: 0.68
 ```
 </br>
 > evaluation_results.csv </br>
