@@ -252,10 +252,10 @@ chain =  {'context': retriever  | RunnableLambda(content_from_doc), 'question': 
 </br>
 
 ### 🥩 4) 산출물 정리
-> vector_store(forlder)
-> RAG chain 설계 및 LLM 연동_최종.ipynb
-> embedding_vector_db-최종.ipynb
-> config.py
+> vector_store(forlder) </br>
+> RAG chain 설계 및 LLM 연동_최종.ipynb </br>
+> embedding_vector_db-최종.ipynb </br>
+> config.py </br>
 
 </br>
 </br>
