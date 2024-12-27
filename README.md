@@ -277,6 +277,8 @@ chain =  {'context': retriever  | RunnableLambda(content_from_doc), 'question': 
 Recall: 0.66
 F1 Score: 0.68
 ```
+![111](https://github.com/user-attachments/assets/ed2e303b-6cec-446f-8ff0-5ae9fd350c8c)
+
 </br>
 > test.ipynb </br>
 > evaluation_results.csv </br>
