@@ -268,13 +268,20 @@ chain =  {'context': retriever  | RunnableLambda(content_from_doc), 'question': 
 |응답|<img src="https://github.com/user-attachments/assets/2b3c86dd-4ee0-4776-9ed1-9445f3d06359" alt="image" width="50%">|
 </br>
 
-### 1) 평가 결과, 결과물
-> Recall : 0.66</br>
-> F1-Score : 0.68</br>
-> evaluation_results.csv</br>
+### 1) 🥘 평가 결과, 결과물
+```
+BLEU Score: 0.00
+ROUGE: {'rouge1': Score(precision=0.0, recall=0.0, fmeasure=0.0), 'rougeL': Score(precision=0, recall=0, fmeasure=0)}
+Precision: 0.16
+Recall: 0.15
+F1 Score: 0.16
+Semantic Similarity: 0.87
+```
+</br>
+> evaluation_results.csv </br>
 
 
-### 2) Discussion
+### 2) 🤔 Discussion
 > 방법 : 무작위로 하나의 식당(Document)에 대한 정보를 뽑아서 예상 질문 다섯개를 만들어 성능 평가. 총 100개 ( 20개 식당 X 5개의 질문)
 > 결과
 
