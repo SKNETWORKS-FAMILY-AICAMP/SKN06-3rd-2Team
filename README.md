@@ -151,6 +151,7 @@ print("수정된 최종 CSV 파일 저장 완료!")
 ### 🥩 4) 산출물 정리
 > 웹사이트 크롤링 데이터 : restaurants.json </br>
 > 정규화 및 전처리 후 데이터 : final_restaurant.csv </br>
+> BRS 데이터 수집과 전처리_all.ipynb </br>
 </br></br>
 ## 2. 모델링
 ### 🍖 1) embedding_vector 생성
@@ -251,7 +252,10 @@ chain =  {'context': retriever  | RunnableLambda(content_from_doc), 'question': 
 </br>
 
 ### 🥩 4) 산출물 정리
-> vector_store
+> vector_store(forlder)
+> RAG chain 설계 및 LLM 연동_최종.ipynb
+> embedding_vector_db-최종.ipynb
+> config.py
 
 </br>
 </br>
@@ -274,6 +278,7 @@ Recall: 0.66
 F1 Score: 0.68
 ```
 </br>
+> test.ipynb </br>
 > evaluation_results.csv </br>
 
 
