@@ -7,7 +7,8 @@
 
 | 강채연 | 김동명| 박창규 | 백하은| 홍준 |
 | --- | --- | --- | --- | --- |
-| ![IE001847808_STD](https://github.com/user-attachments/assets/c2f2176b-7c40-4769-b3a4-7dbef5565109) |![돌아이](https://github.com/user-attachments/assets/eab0022e-6793-40e5-929a-9c1fda6d57c7)| <> |![강록이형](https://github.com/user-attachments/assets/3f3a4698-0df0-4028-8a9c-d8ced265a568)| ![image](https://github.com/user-attachments/assets/82d51900-3bce-4ec5-9ec7-d49612a106bf)
+| ![IE001847808_STD](https://github.com/user-attachments/assets/c2f2176b-7c40-4769-b3a4-7dbef5565109) |![돌아이](https://github.com/user-attachments/assets/eab0022e-6793-40e5-929a-9c1fda6d57c7)| <> |![강록이형](https://github.com/user-attachments/assets/3f3a4698-0df0-4028-8a9c-d8ced265a568)| ![image](https://github.com/user-attachments/assets/63c6a12f-3ffc-468f-8d04-decaead7df63)
+
 
  |
 |성능 테스트 및 최적화|데이터 수집 및 전처리|RAG 체인 설계 및 최적화|벡터 데이터베이스 구축|RAG 체인 설계 및 최적화|
@@ -440,4 +441,4 @@ chain = ({'content': retriever, 'question':RunnablePassthrough()} | prompt_templ
 >
 
 홍준
-> 더 열심히 해야겠다.
+> 어디로 가야하오?
