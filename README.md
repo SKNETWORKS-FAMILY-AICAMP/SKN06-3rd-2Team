@@ -201,12 +201,11 @@ print("수정된 최종 CSV 파일 저장 완료!")
 ## 2. 모델링
 
 ### 🍖 1) embedding_vector 생성
-> text_splitter, embeddings 를 사용하여 데이터를 분해 및 저장
 > 결과 : vector_store에 39074 개의 문서 생성
 
 ```
 # 데이터 불러오기 및 저장
-data = pd.read_csv('data/cleaned_all_restaurants.csv')
+data = pd.read_csv('data/final_restaurants.csv')
 
 
 # 모든 데이터를 활용하도록 문서화
@@ -221,17 +220,6 @@ for i, row in data.iterrows():
     documents.append(doc)
 
 print(f"총 {len(documents)}개의 문서가 생성되었습니다.")
-
-
-# 분리
-splitter = RecursiveCharacterTextSplitter.from_tiktoken_encoder(
-    model_name=MODEL_NAME, 
-    chunk_size=CHUNK_SIZE,
-    chunk_overlap=CHUNK_OVERLAP
-)
-splited_docs = splitter.split_documents(documents)
-
-print("데이터 분리 완료:", len(splited_docs), end='\n\n')
 
 
 # Vector store 저장
@@ -255,15 +243,9 @@ print("vecor_store에 splited_docs 저장완료")
 ```
 
 ### 🍖 2) config로부터 설정 값 입력
-> chunk_size : 500
-> chunk_overlap : 100
-> 
-```
+
 # setting
-
-CHUNK_SIZE = config.chunk_size
-CHUNK_OVERLAP = config.chunk_overlap
-
+```
 MODEL_NAME  = config.model_name
 EMBEDDING_NAME = config.embedding_name
 
@@ -274,7 +256,7 @@ PERSIST_DIRECTORY = config.persist_directory
 
 ### 🍖 3) vector_store 에 저장
 ```
-data = pd.read_csv("final_merged_result.csv")
+data = pd.read_csv("final_restaurants.csv")
 
 
 # 모든 데이터를 활용하도록 문서화
@@ -291,17 +273,6 @@ for i, row in data.iterrows():
     documents.append(doc)
 
 print(f"총 {len(documents)}개의 문서가 생성되었습니다.")
-
-
-# 분리
-splitter = RecursiveCharacterTextSplitter.from_tiktoken_encoder(
-    model_name=MODEL_NAME, 
-    chunk_size=CHUNK_SIZE,
-    chunk_overlap=CHUNK_OVERLAP
-)
-splited_docs = splitter.split_documents(documents)
-
-print("데이터 분리 완료:", len(splited_docs), end='\n\n')
 
 
 # Vector store 저장
@@ -365,7 +336,7 @@ model = ChatOpenAI(
 )
 
 
-# Retriever 생성 - "Map Reduce" 방식 - 더 정확한 답변
+# Retriever 생성
 retriever = vector_store.as_retriever(
     search_type="mmr",
     search_kwargs={"k":5, "fetch_k":10, "lambda_mult":0.5}
@@ -397,9 +368,6 @@ prompt_template = ChatPromptTemplate.from_messages([
 
 chain = ({'content': retriever, 'question':RunnablePassthrough()} | prompt_template | model | StrOutputParser() )
 
-# response = retrieval_qa({"query": QUERY})
-
-# print("응답:", response["result"])
 ```
 
 </br></br>
