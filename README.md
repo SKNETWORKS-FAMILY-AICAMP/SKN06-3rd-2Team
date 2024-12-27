@@ -203,7 +203,7 @@ print(f"Metadatas: {metadatas[:5]}")
 print(vector_store._collection.count())
 ```
 </br></br>
-## 3. GPT 모델, Prompt, Retriever 생성
+### 3) GPT 모델, Prompt, Retriever 생성
 ```
 vector_store = Chroma(
     embedding_function=embedding_model,
@@ -240,15 +240,22 @@ def content_from_doc(docs:list[Document]):
     return "\n\n".join([d.page_content for d in docs])
 chain =  {'context': retriever  | RunnableLambda(content_from_doc), 'question': RunnablePassthrough()}  | prompt_template | model | StrOutputParser()
 ```
-</br></br>
+</br>
 
-## 🦴 모델 구조
+### 4) 산출물 정리
+>
+
+</br>
+</br>
+
+
+## 🦴 3. 모델 구조
 >
 
 </br></br>
 
 
-## 😋 모델 평가
+## 😋 4. 모델 평가
  
 |질문|서울 서대문구 근처 음식점 중 리본 개수가 2개인 맛집을 추천해줘.|
 |----|----|
@@ -260,7 +267,7 @@ chain =  {'context': retriever  | RunnableLambda(content_from_doc), 'question': 
 
 
 
-## 팀원 회고
+## 5. 팀원 회고
 강채연
 > 플젝하면서 맛집 많이 알게되어서 조앗다 우하하
 </br>
